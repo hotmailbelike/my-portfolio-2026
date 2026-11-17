@@ -1,6 +1,6 @@
 ---
 import { PROFILE } from '../../data/profile';
-import CopyEmailButton from '../CopyEmailButton.astro';
+import EmailWithCopy from '../EmailWithCopy.astro';
 import ExternalLink from '../ExternalLink.astro';
 import Icon from '../Icon.astro';
 ---
@@ -13,8 +13,8 @@ import Icon from '../Icon.astro';
   <h1 class="intro__title" id="intro-title">{PROFILE.positioning}</h1>
   <p class="intro__summary">{PROFILE.summary}</p>
 
+  <p class="intro__email"><EmailWithCopy email={PROFILE.email} /></p>
   <ul class="intro__links">
-    <CopyEmailButton email={PROFILE.email} />
     <li>
       <ExternalLink href={PROFILE.githubUrl} class="intro__link">
         <Icon name="github" /> GitHub
@@ -25,8 +25,13 @@ import Icon from '../Icon.astro';
         <Icon name="linkedin" /> LinkedIn
       </ExternalLink>
     </li>
+    <li>
+      <ExternalLink href={PROFILE.resumeUrl} class="intro__link">
+        Résumé <Icon name="arrow-up-right" size={14} />
+      </ExternalLink>
+    </li>
+    <li class="intro__phone-only"><a class="intro__link" href="#projects">Projects</a></li>
     <li class="intro__phone-only"><a class="intro__link" href="#experience">Experience</a></li>
-    <li class="intro__phone-only"><a class="intro__link" href="#work">Work</a></li>
     <li class="intro__phone-only"><a class="intro__link" href="#about">About</a></li>
   </ul>
 </section>
@@ -72,14 +77,24 @@ import Icon from '../Icon.astro';
     font-size: var(--text-lg);
   }
 
+  .intro__email {
+    margin-top: 1.25rem;
+  }
+
   .intro__links {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.75rem 1.5rem;
-    margin-top: 1.5rem;
+    margin-top: 0.75rem;
     padding: 0;
     list-style: none;
+  }
+
+  /* Flex items, so links that start with an icon and links that start with
+     text are centered the same way instead of lining up on the text baseline. */
+  .intro__links > li {
+    display: flex;
   }
 
   .intro__link {
@@ -95,14 +110,14 @@ import Icon from '../Icon.astro';
     color: var(--color-accent);
   }
 
-  .intro__phone-only {
+  .intro__links > .intro__phone-only {
     display: none;
   }
 
   /* The header hides its section links on phones; they appear here instead. */
   @media (width < 40rem) {
-    .intro__phone-only {
-      display: list-item;
+    .intro__links > .intro__phone-only {
+      display: flex;
     }
   }
 </style>
