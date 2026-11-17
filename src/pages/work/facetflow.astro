@@ -1,0 +1,238 @@
+---
+import { Picture } from 'astro:assets';
+
+import BrowserFrame from '../../components/BrowserFrame.astro';
+import ArchitectureDiagram from '../../components/case-study/ArchitectureDiagram.astro';
+import ScreenGallery from '../../components/case-study/ScreenGallery.astro';
+import ExternalLink from '../../components/ExternalLink.astro';
+import Icon from '../../components/Icon.astro';
+import Tags from '../../components/Tags.astro';
+import { FACETFLOW } from '../../data/projects';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const HERO_WIDTHS = [640, 960, 1280, 1800, 2400];
+const HERO_SIZES = '(min-width: 72rem) 1120px, calc(100vw - 2rem)';
+---
+
+<BaseLayout title={`${FACETFLOW.name} case study · Abdullah Omar`} description={FACETFLOW.summary}>
+  <article class="case-study">
+    <header class="container case-study__header">
+      <a class="case-study__back" href="/#work">
+        <Icon name="arrow-left" size={14} /> All work
+      </a>
+      <p class="eyebrow">Case study · {FACETFLOW.years}</p>
+      <h1 class="case-study__title">{FACETFLOW.name}</h1>
+      <p class="case-study__lede">{FACETFLOW.summary}</p>
+
+      <dl class="case-study__meta">
+        <div>
+          <dt class="eyebrow">Role</dt>
+          <dd>{FACETFLOW.role}</dd>
+        </div>
+        <div>
+          <dt class="eyebrow">Stack</dt>
+          <dd><Tags tags={FACETFLOW.tags} /></dd>
+        </div>
+        <div>
+          <dt class="eyebrow">Live</dt>
+          <dd>
+            <ExternalLink href={FACETFLOW.url} class="case-study__live">
+              facetflow.io <Icon name="arrow-up-right" size={14} />
+            </ExternalLink>
+          </dd>
+        </div>
+      </dl>
+    </header>
+
+    <div class="container">
+      <BrowserFrame>
+        <Picture
+          class="case-study__hero"
+          src={FACETFLOW.hero.image}
+          alt={FACETFLOW.hero.alt}
+          formats={['avif', 'webp']}
+          widths={HERO_WIDTHS}
+          sizes={HERO_SIZES}
+          loading="eager"
+          fetchpriority="high"
+          style="view-transition-name: shot-facetflow"
+        />
+      </BrowserFrame>
+    </div>
+
+    <div class="container case-study__body">
+      <section aria-labelledby="problem">
+        <h2 id="problem">The problem</h2>
+        <p>
+          Taking a piece of jewelry from a customer's idea to something priced and ready to manufacture means sketches,
+          CAD, stone sourcing and spreadsheets, each in a different tool and often with a different person. Every
+          revision goes round the same loop, and quoting a price can take days.
+        </p>
+        <p>
+          FacetFlow puts that whole path in one place. A jeweler describes a design or uploads a sketch or photo, refines
+          it in conversation, sees it worn, and gets a price for each quality tier, all without leaving the chat.
+        </p>
+      </section>
+
+      <section aria-labelledby="role">
+        <h2 id="role">What I built</h2>
+        <p>
+          I work directly with the founders as part of a small team, so I own features end to end, from the interface to
+          the services and data behind it. Highlights:
+        </p>
+        <ul>
+          <li>
+            Design generation from prompts and reference images, with guided flows for refining a design version by
+            version.
+          </li>
+          <li>Annotation, pricing and technical-drawing experiences that turn complex jewelry work into clear steps.</li>
+          <li>Specialist agents and the tools they call, wired into one chat that plans every turn.</li>
+          <li>The product details around them: usage-based billing, realtime progress, and reliable retries.</li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="architecture">
+        <h2 id="architecture">How it works</h2>
+        <p>
+          Every request starts in one chat. A planner reads the turn and hands it to the specialist that fits, such as
+          design or pricing. Each specialist runs its own loop of model calls and tools. All orchestration is built as
+          LangGraph graphs, so a long run can pause for the user's approval and resume exactly where it stopped.
+        </p>
+        <ArchitectureDiagram />
+      </section>
+
+      <section aria-labelledby="trade-off">
+        <h2 id="trade-off">One trade-off</h2>
+        <p>
+          AI calls are slow, billed, and sometimes fail halfway. The easy path is to retry them. We decided that every
+          call to a paid or unpredictable provider goes through a single tool service that writes a durable receipt,
+          keyed by a stable invocation key, before and after the call.
+        </p>
+        <p>
+          The cost is more ceremony for each new tool. In return, a retry or a resumed run never charges a customer
+          twice or generates the same render twice, and every step can be traced from the chat message down to the
+          provider call.
+        </p>
+      </section>
+
+      <section aria-labelledby="screens">
+        <h2 id="screens">Screens</h2>
+        <p>Select a screen to see it full size.</p>
+        <ScreenGallery screens={FACETFLOW.screens} />
+      </section>
+
+      <footer class="case-study__footer">
+        <a class="case-study__back" href="/#work">
+          <Icon name="arrow-left" size={14} /> Back to all work
+        </a>
+        <ExternalLink href={FACETFLOW.url} class="case-study__live">
+          Visit facetflow.io <Icon name="arrow-up-right" size={14} />
+        </ExternalLink>
+      </footer>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .case-study__header {
+    padding-block: clamp(2rem, 5vw, 3.5rem) 2.5rem;
+  }
+
+  .case-study__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-bottom: 2rem;
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+    text-decoration: none;
+  }
+
+  .case-study__back:hover {
+    color: var(--color-text);
+  }
+
+  .case-study__title {
+    margin-top: 0.5rem;
+    font-size: var(--text-display);
+  }
+
+  .case-study__lede {
+    max-width: 44rem;
+    margin-top: 1rem;
+    color: var(--color-muted);
+    font-size: var(--text-lg);
+  }
+
+  .case-study__meta {
+    display: grid;
+    gap: 1.25rem 3rem;
+    margin-top: 2rem;
+  }
+
+  @media (width >= 48rem) {
+    .case-study__meta {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr) auto;
+    }
+  }
+
+  .case-study__meta dd {
+    margin-top: 0.5rem;
+  }
+
+  .case-study__live {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-weight: 600;
+  }
+
+  .case-study__hero {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: left top;
+  }
+
+  .case-study__body {
+    display: grid;
+    gap: 4rem;
+    max-width: min(100% - 2 * var(--gutter), 55rem);
+    padding-top: var(--space-section);
+  }
+
+  .case-study__body h2 {
+    margin-bottom: 1rem;
+    font-size: var(--text-h2);
+  }
+
+  .case-study__body section > p,
+  .case-study__body section > ul {
+    max-width: 44rem;
+    margin-bottom: 1.25rem;
+    color: var(--color-muted);
+  }
+
+  .case-study__body ul {
+    display: grid;
+    gap: 0.5rem;
+    padding-left: 1.25rem;
+  }
+
+  .case-study__body li::marker {
+    color: var(--color-accent);
+  }
+
+  .case-study__footer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .case-study__footer .case-study__back {
+    margin-bottom: 0;
+  }
+</style>
