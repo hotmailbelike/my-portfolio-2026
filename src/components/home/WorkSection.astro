@@ -1,21 +1,27 @@
 ---
-import { PROJECTS } from '../../data/projects';
+import { PROJECT_KIND, PROJECTS, type ProjectKind } from '../../data/projects';
 import SectionHeading from '../SectionHeading.astro';
 import WorkCard from './WorkCard.astro';
+
+/* Professional work always comes first; the order within each kind is the order in PROJECTS. */
+const KIND_ORDER: Record<ProjectKind, number> = {
+  [PROJECT_KIND.professional]: 0,
+  [PROJECT_KIND.personal]: 1,
+};
+const orderedProjects = [...PROJECTS].sort((a, b) => KIND_ORDER[a.kind] - KIND_ORDER[b.kind]);
 ---
 
 <section class="section container" aria-labelledby="projects">
   <SectionHeading id="projects" title="Projects" />
 
   <div class="work-grid">
-    {PROJECTS.map((project) => <WorkCard project={project} />)}
+    {orderedProjects.map((project) => <WorkCard project={project} />)}
   </div>
 </section>
 
 <style>
   /* One column on phones, two from 42rem. A wide card (see WorkCard.astro)
-     takes a whole row, so every row below it holds two cards of the same shape.
-     PROJECTS lists professional work first, so it stays on top. */
+     takes a whole row, so every row below it holds two cards of the same shape. */
   .work-grid {
     display: grid;
     gap: 3.5rem 2.5rem;
