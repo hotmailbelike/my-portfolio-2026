@@ -22,7 +22,7 @@
   --text-base: 1.0625rem;
   --text-lg: 1.25rem;
   --text-h2: clamp(1.75rem, 1.2vw + 1.4rem, 2.25rem);
-  /* Capped so the intro stays at two lines and the FacetFlow screen shows at 1280x720. */
+  /* Capped so the intro stays at two lines and the Facet Flow screen shows at 1280x720. */
   --text-display: clamp(2rem, 2.2vw + 1.25rem, 2.75rem);
 
   --space-section: clamp(4.5rem, 8vw, 7.5rem);
@@ -129,21 +129,8 @@ button {
 }
 
 .section-heading {
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
   margin-bottom: 2rem;
   font-size: var(--text-h2);
-}
-
-/* The pink index number before each section title, e.g. "02". */
-.section-heading__index {
-  font-family: var(--font-body);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.04em;
-  color: var(--color-accent);
 }
 
 .eyebrow {
@@ -166,8 +153,8 @@ button {
   border: 0;
 }
 
-/* Cross-document view transitions: the FacetFlow card's screenshot grows into
-   the case study's hero. Browsers without support just navigate normally. */
+/* Cross-document view transitions: the Facet Flow card's screenshot grows into
+   the work page's hero. Browsers without support just navigate normally. */
 @media (prefers-reduced-motion: no-preference) {
   @view-transition {
     navigation: auto;
