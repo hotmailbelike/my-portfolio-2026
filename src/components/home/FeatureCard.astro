@@ -1,6 +1,6 @@
 ---
-/* The FacetFlow highlight. Its screenshot shares a view-transition name with
-   the case study's hero, so the image grows into the next page on click. */
+/* The Facet Flow highlight. Its screenshot shares a view-transition name with
+   the work page's hero, so the image grows into the next page on click. */
 import { Picture } from 'astro:assets';
 
 import { FACETFLOW } from '../../data/projects';
@@ -8,7 +8,7 @@ import BrowserFrame from '../BrowserFrame.astro';
 import Icon from '../Icon.astro';
 import Tags from '../Tags.astro';
 
-const caseStudyHref = `/work/${FACETFLOW.slug}`;
+const workPageHref = `/work/${FACETFLOW.slug}`;
 const SHOT_WIDTHS = [640, 960, 1280, 1800, 2400];
 /* Approximates the card layout below: beside the text column from 56rem, full width under it. */
 const SHOT_SIZES = '(min-width: 72rem) 760px, (min-width: 56rem) 57vw, calc(100vw - 4rem)';
@@ -17,16 +17,16 @@ const SHOT_SIZES = '(min-width: 72rem) 760px, (min-width: 56rem) 57vw, calc(100v
 <section class="feature container" aria-labelledby="feature-title">
   <article class="feature__card">
     <div class="feature__text">
-      <p class="eyebrow">Featured case study · {FACETFLOW.years}</p>
+      <p class="eyebrow">Current role · {FACETFLOW.years}</p>
       <h2 class="feature__title" id="feature-title">
-        <a class="feature__link" href={caseStudyHref}>
-          {FACETFLOW.name}<span class="visually-hidden"> case study</span>
+        <a class="feature__link" href={workPageHref}>
+          {FACETFLOW.name}<span class="visually-hidden">: what I worked on</span>
         </a>
       </h2>
       <p class="feature__summary">{FACETFLOW.teaser}</p>
       <Tags tags={FACETFLOW.tags} />
       <span class="feature__cta" aria-hidden="true">
-        Read the case study <Icon name="arrow-right" />
+        What I worked on <Icon name="arrow-right" />
       </span>
     </div>
 
