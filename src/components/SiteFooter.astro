@@ -1,0 +1,33 @@
+---
+import { PROFILE } from '../data/profile';
+import ExternalLink from './ExternalLink.astro';
+
+const buildYear = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <p>© {buildYear} {PROFILE.fullName}</p>
+    <p class="site-footer__colophon">
+      Built with <ExternalLink href="https://astro.build">Astro</ExternalLink>, set in Jost and Hanken Grotesk, hosted on
+      Netlify. <ExternalLink href="https://github.com/hotmailbelike/my-portfolio-2026">Source</ExternalLink>
+    </p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: var(--space-section);
+    padding-block: 2rem;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+
+  .site-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+  }
+</style>
