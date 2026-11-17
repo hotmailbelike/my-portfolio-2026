@@ -1,0 +1,45 @@
+---
+import { SKILL_GROUPS } from '../../data/skills';
+import SectionHeading from '../SectionHeading.astro';
+---
+
+<section class="section container" aria-labelledby="skills">
+  <SectionHeading id="skills" title="Skills" />
+  <dl class="skills">
+    {
+      SKILL_GROUPS.map((group) => (
+        <div class="skills__row">
+          <dt class="skills__label">{group.label}</dt>
+          <dd class="skills__list">{group.skills.join(' · ')}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>
+
+<style>
+  .skills__row {
+    display: grid;
+    gap: 0.25rem 2rem;
+    padding-block: 1.125rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .skills__row:last-child {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  @media (width >= 48rem) {
+    .skills__row {
+      grid-template-columns: 11rem 1fr;
+    }
+  }
+
+  .skills__label {
+    font-weight: 600;
+  }
+
+  .skills__list {
+    color: var(--color-muted);
+  }
+</style>
