@@ -1,14 +1,10 @@
 ---
 interface Props {
   id: string;
-  index: string;
   title: string;
 }
 
-const { id, index, title } = Astro.props;
+const { id, title } = Astro.props;
 ---
 
-<h2 class="section-heading" id={id}>
-  <span class="section-heading__index" aria-hidden="true">{index}</span>
-  {title}
-</h2>
+<h2 class="section-heading" id={id}>{title}</h2>
