@@ -1,0 +1,40 @@
+---
+import Icon from '../components/Icon.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Page not found · Abdullah Omar" description="This page does not exist." noIndex>
+  <section class="container not-found">
+    <p class="eyebrow">404</p>
+    <h1 class="not-found__title">This page doesn't exist.</h1>
+    <p class="not-found__text">It may have moved when the site was rebuilt.</p>
+    <a class="not-found__home" href="/">
+      <Icon name="arrow-left" size={14} /> Back to the home page
+    </a>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    padding-block: clamp(4rem, 12vw, 8rem);
+  }
+
+  .not-found__title {
+    margin-top: 0.75rem;
+    font-size: var(--text-display);
+  }
+
+  .not-found__text {
+    margin-top: 1rem;
+    color: var(--color-muted);
+    font-size: var(--text-lg);
+  }
+
+  .not-found__home {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    margin-top: 2rem;
+    font-weight: 600;
+  }
+</style>
