@@ -1,7 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 
-import { PROJECT_CARD_SIZE, type Project } from '../../data/projects';
+import { PROJECT_CARD_SIZE, PROJECT_KIND, type Project } from '../../data/projects';
 import ExternalLink from '../ExternalLink.astro';
 import Icon from '../Icon.astro';
 import Tags from '../Tags.astro';
@@ -12,6 +12,7 @@ interface Props {
 
 const { project } = Astro.props;
 const isWide = project.size === PROJECT_CARD_SIZE.wide;
+const isPersonal = project.kind === PROJECT_KIND.personal;
 const CARD_IMAGE_WIDTHS = [400, 640, 960];
 /* Mirrors the grid in WorkSection.astro: two columns from 42rem in a 70rem container.
    A wide card puts its image beside the text, so the image is still one column wide. */
@@ -27,15 +28,22 @@ const CARD_IMAGE_SIZES = '(min-width: 72rem) 540px, (min-width: 42rem) 45vw, cal
       formats={['avif', 'webp']}
       widths={CARD_IMAGE_WIDTHS}
       sizes={CARD_IMAGE_SIZES}
-      style={`object-position: ${project.imagePosition}`}
+      style={`object-position: ${project.imagePosition}; object-fit: ${project.imageFit ?? 'cover'}`}
     />
   </div>
   <div class="work-card__body">
+    {isPersonal && <p class="eyebrow work-card__kind">Personal project</p>}
     <h3 class="work-card__title">
-      <ExternalLink href={project.url} class="work-card__link">
-        {project.name}
-        <Icon name="arrow-up-right" size={18} class="work-card__arrow" />
-      </ExternalLink>
+      {
+        project.url ? (
+          <ExternalLink href={project.url} class="work-card__link">
+            {project.name}
+            <Icon name="arrow-up-right" size={18} class="work-card__arrow" />
+          </ExternalLink>
+        ) : (
+          project.name
+        )
+      }
     </h3>
     <p class="work-card__summary">{project.summary}</p>
     <p class="work-card__detail"><span class="work-card__label">My role:</span> {project.role}</p>
@@ -44,6 +52,15 @@ const CARD_IMAGE_SIZES = '(min-width: 72rem) 540px, (min-width: 42rem) 45vw, cal
       {project.outcome}
     </p>
     <Tags tags={project.tags} />
+    {
+      project.codeUrl && (
+        <p class="work-card__code">
+          <ExternalLink href={project.codeUrl} class="work-card__code-link">
+            <Icon name="github" size={14} /> Code
+          </ExternalLink>
+        </p>
+      )
+    }
   </div>
 </article>
 
@@ -147,6 +164,29 @@ const CARD_IMAGE_SIZES = '(min-width: 72rem) 540px, (min-width: 42rem) 45vw, cal
   .work-card :global(.tags) {
     margin-top: auto;
     padding-top: 0.25rem;
+  }
+
+  .work-card__kind {
+    margin-bottom: -0.375rem;
+    color: var(--color-accent);
+  }
+
+  /* Sits above the title link's card-wide click area, so it stays its own target. */
+  .work-card__code {
+    position: relative;
+    z-index: 1;
+  }
+
+  .work-card__code :global(.work-card__code-link) {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: var(--text-sm);
+    font-weight: 600;
+  }
+
+  .work-card__code :global(.work-card__code-link:hover) {
+    color: var(--color-accent);
   }
 
   .work-card:hover .work-card__image-frame {
