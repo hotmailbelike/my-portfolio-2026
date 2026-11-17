@@ -1,0 +1,73 @@
+---
+import { PROFILE } from '../../data/profile';
+import CopyEmailButton from '../CopyEmailButton.astro';
+import ExternalLink from '../ExternalLink.astro';
+import Icon from '../Icon.astro';
+import SectionHeading from '../SectionHeading.astro';
+---
+
+<section class="section container" aria-labelledby="contact">
+  <SectionHeading id="contact" index="04" title="Get in touch" />
+  <p class="contact__lede">Have a role, a project or a question? Email is the quickest way to reach me.</p>
+  <a class="contact__email" href={`mailto:${PROFILE.email}`}>{PROFILE.email}</a>
+  <ul class="contact__links">
+    <CopyEmailButton email={PROFILE.email} label="Copy address" />
+    <li>
+      <ExternalLink href={PROFILE.githubUrl} class="contact__link">
+        <Icon name="github" /> GitHub
+      </ExternalLink>
+    </li>
+    <li>
+      <ExternalLink href={PROFILE.linkedinUrl} class="contact__link">
+        <Icon name="linkedin" /> LinkedIn
+      </ExternalLink>
+    </li>
+  </ul>
+</section>
+
+<style>
+  .contact__lede {
+    max-width: 36rem;
+    color: var(--color-muted);
+    font-size: var(--text-lg);
+  }
+
+  .contact__email {
+    display: inline-block;
+    margin-top: 1.25rem;
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 3vw + 0.5rem, 2.5rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--color-accent);
+  }
+
+  .contact__email:hover {
+    color: var(--color-accent);
+  }
+
+  .contact__links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+    margin-top: 1.75rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .contact__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .contact__link:hover {
+    color: var(--color-accent);
+  }
+</style>
