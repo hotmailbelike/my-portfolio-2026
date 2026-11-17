@@ -1,8 +1,8 @@
 /* -----------------------------------------
-  Copy-email buttons. Markup: CopyEmailButton.astro. Each button's list item
-  ships hidden and is revealed here, so visitors without JavaScript or
-  clipboard access never see a button that does nothing; they still have the
-  mailto link in the Contact section.
+  Copy-email buttons. Markup: EmailWithCopy.astro. Each copy button ships
+  hidden and is revealed here, so visitors without JavaScript or clipboard
+  access never see a button that does nothing; the address itself is always
+  a mailto link.
  ---------------------------------------- */
 
 const COPIED_STATE_MS = 1800;
@@ -19,13 +19,12 @@ interface CopyEmailTimers {
 
 const timersByRoot = new WeakMap<HTMLElement, CopyEmailTimers>();
 
-const showCopied = (root: HTMLElement, label: HTMLElement, status: HTMLElement, idleLabel: string): void => {
+const showCopied = (root: HTMLElement, status: HTMLElement): void => {
   const timers = timersByRoot.get(root) ?? {};
   window.clearTimeout(timers.announce);
   window.clearTimeout(timers.reset);
 
   root.classList.add(COPIED_CLASS);
-  label.textContent = 'Copied';
   status.textContent = '';
 
   timers.announce = window.setTimeout(() => {
@@ -33,7 +32,6 @@ const showCopied = (root: HTMLElement, label: HTMLElement, status: HTMLElement, 
   }, ANNOUNCE_DELAY_MS);
   timers.reset = window.setTimeout(() => {
     root.classList.remove(COPIED_CLASS);
-    label.textContent = idleLabel;
     status.textContent = '';
   }, COPIED_STATE_MS);
   timersByRoot.set(root, timers);
@@ -41,11 +39,10 @@ const showCopied = (root: HTMLElement, label: HTMLElement, status: HTMLElement, 
 
 const initCopyEmail = (root: HTMLElement): void => {
   const button = root.querySelector<HTMLButtonElement>('[data-copy-email-button]');
-  const label = root.querySelector<HTMLElement>('[data-copy-email-label]');
   const status = root.querySelector<HTMLElement>('[data-copy-email-status]');
   const email = root.dataset.copyEmail;
 
-  if (!button || !label || !status || !email) {
+  if (!button || !status || !email) {
     return;
   }
 
@@ -54,13 +51,12 @@ const initCopyEmail = (root: HTMLElement): void => {
     return;
   }
 
-  const idleLabel = label.textContent ?? '';
-  root.hidden = false;
+  button.hidden = false;
 
   button.addEventListener('click', async () => {
     try {
       await navigator.clipboard.writeText(email);
-      showCopied(root, label, status, idleLabel);
+      showCopied(root, status);
     } catch {
       // Clipboard access can be refused (permissions, insecure context); fall back to the mail app.
       window.location.href = `mailto:${email}`;
