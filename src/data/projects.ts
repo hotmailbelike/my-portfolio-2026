@@ -12,6 +12,12 @@ import facetflowOnBodyImage from '../assets/projects/facetflow-site/on-body.webp
 import facetflowRingRenderImage from '../assets/projects/facetflow-site/ring-render.webp';
 import facetflowTechnicalDrawingImage from '../assets/projects/facetflow-site/technical-drawing.webp';
 import harmcheckImage from '../assets/projects/harmcheck-opengraph.jpg';
+import medTrackerImage from '../assets/projects/med-tracker.webp';
+import paceUpImage from '../assets/projects/pace-up.webp';
+import beforeYouSendImage from '../assets/projects/side/before-you-send.jpg';
+import proflensImage from '../assets/projects/side/proflens.jpg';
+import pulseImage from '../assets/projects/side/pulse.jpg';
+import ringStudioImage from '../assets/projects/side/ring-studio.jpg';
 import tradesOrgImage from '../assets/projects/trades-org.png';
 
 export interface Screenshot {
@@ -61,28 +67,34 @@ export const PROJECT_CARD_SIZE = {
 
 export type ProjectCardSize = (typeof PROJECT_CARD_SIZE)[keyof typeof PROJECT_CARD_SIZE];
 
+export const PROJECT_KIND = {
+  professional: 'professional',
+  personal: 'personal',
+} as const;
+
+export type ProjectKind = (typeof PROJECT_KIND)[keyof typeof PROJECT_KIND];
+
 export interface Project {
   name: string;
+  kind: ProjectKind;
   summary: string;
   role: string;
   /** A shipped fact or a number. Every card needs one. */
   outcome: string;
   tags: string[];
-  url: string;
+  /** Live site or store page. Left out for apps that are no longer live. */
+  url?: string;
+  /** Public source code, for personal projects. */
+  codeUrl?: string;
   image: ImageMetadata;
   imageAlt: string;
   /** CSS object-position for the 16:10 crop, so the useful part of the shot stays in frame. */
   imagePosition: string;
+  /** Tall phone screenshots are shown whole ('contain') instead of cropped to 16:10. */
+  imageFit?: 'cover' | 'contain';
   size: ProjectCardSize;
 }
 
-export interface EarlierProject {
-  year: string;
-  name: string;
-  builtWith: string;
-  /** Only for projects with something live to show; the name becomes the link. */
-  url?: string;
-}
 
 export const FACETFLOW: FeaturedProject = {
   slug: 'facetflow',
@@ -201,10 +213,11 @@ export const FACETFLOW: FeaturedProject = {
   ],
 };
 
-/** In grid order: the wide Alphy card takes the first row, then two cards per row. */
+/** In grid order: professional work first (the wide Alphy card takes the first row), then personal projects. */
 export const PROJECTS: Project[] = [
   {
     name: 'Alphy → HarmCheck',
+    kind: PROJECT_KIND.professional,
     summary:
       'Alphy, a Silicon Valley startup, first built a community app for advancing women in their careers (talks, learning tracks, jobs, groups), then pivoted to HarmCheck: AI that flags harmful or non-compliant messages before they are sent, delivered as a browser extension, an Outlook add-in and integrations for other email services.',
     role: "Built Alphy's React Native app, then worked on HarmCheck's browser extension, Outlook add-in and email integrations as the company pivoted.",
@@ -218,6 +231,7 @@ export const PROJECTS: Project[] = [
   },
   {
     name: 'Trades.org CRM & ATS',
+    kind: PROJECT_KIND.professional,
     summary:
       'A CRM and applicant tracking system for trade businesses: contacts and companies on one side, job posts and applicant pipelines on the other.',
     role: 'Played a key role in designing and implementing the ATS, and built key CRM features.',
@@ -231,6 +245,7 @@ export const PROJECTS: Project[] = [
   },
   {
     name: 'Alloy',
+    kind: PROJECT_KIND.professional,
     summary:
       'A mobile app for selling unused gold, silver, platinum and palladium jewelry for cash, with upfront estimates, live support and a no-questions-asked return policy.',
     role: 'Built features across the React Native app and its Node.js back end.',
@@ -244,6 +259,7 @@ export const PROJECTS: Project[] = [
   },
   {
     name: 'Bevy Price Rules',
+    kind: PROJECT_KIND.professional,
     summary:
       'A Shopify app for rule-based pricing: store owners bulk-edit prices and schedule sales by title, tag, collection, price and more, with discounts that stack.',
     role: 'Built the app from first concept to deployment.',
@@ -257,6 +273,7 @@ export const PROJECTS: Project[] = [
   },
   {
     name: 'Bevy Share Cart',
+    kind: PROJECT_KIND.professional,
     summary:
       'A Shopify app that adds a share button to the cart, so shoppers can send their cart to a friend who rebuilds it and buys in one click.',
     role: 'Built the app from first concept to deployment.',
@@ -268,16 +285,89 @@ export const PROJECTS: Project[] = [
     imagePosition: 'center top',
     size: PROJECT_CARD_SIZE.standard,
   },
-];
-
-/** Years come from each project's repository or store history. */
-export const EARLIER_PROJECTS: EarlierProject[] = [
-  { year: '2021', name: 'Pace Up!', builtWith: 'React Native, Node.js, MongoDB' },
-  { year: '2020', name: 'Med Tracker', builtWith: 'React Native, Node.js, MongoDB' },
   {
-    year: '2019',
-    name: 'Rate my Professor',
-    builtWith: 'jQuery, Express.js, MongoDB',
-    url: 'https://github.com/hotmailbelike/rate-my-professor',
+    name: 'Pace Up!',
+    kind: PROJECT_KIND.professional,
+    summary:
+      'A competitive fitness game: challenge friends to rounds of timed races, where everyone runs with their phone to cover as much distance as possible.',
+    role: 'Built the React Native app and its Node.js back end at Techdojo.',
+    outcome: 'Shipped to Google Play.',
+    tags: ['React Native', 'Node.js', 'Express.js', 'MongoDB'],
+    image: paceUpImage,
+    imageAlt: "Pace Up! round results comparing two players' steps, distance and average speed",
+    imagePosition: 'center',
+    imageFit: 'contain',
+    size: PROJECT_CARD_SIZE.standard,
+  },
+  {
+    name: 'Med Tracker',
+    kind: PROJECT_KIND.professional,
+    summary: 'Schedule medications, get reminders and track intake across multiple prescriptions.',
+    role: 'Built the React Native app and its Node.js back end at Techdojo.',
+    outcome: 'Shipped to Google Play.',
+    tags: ['React Native', 'Node.js', 'Express.js', 'MongoDB'],
+    image: medTrackerImage,
+    imageAlt: 'Med Tracker medication schedule showing previous and upcoming doses',
+    imagePosition: 'center',
+    imageFit: 'contain',
+    size: PROJECT_CARD_SIZE.standard,
+  },
+  {
+    name: 'Ring Studio',
+    kind: PROJECT_KIND.personal,
+    summary:
+      'Design a ring in 3D: metal, stone shape, carat, setting and size, with a live price estimate and shareable designs.',
+    role: 'Designed and built it solo.',
+    outcome: 'Faceted gems and bands generated in code, with physically based materials and no downloaded 3D assets.',
+    tags: ['React', 'three.js', 'React Three Fiber', 'Firestore'],
+    url: 'https://ring-studio-aomar.web.app',
+    codeUrl: 'https://github.com/hotmailbelike/ring-studio',
+    image: ringStudioImage,
+    imageAlt: 'Ring Studio showing a sapphire ring in 3D next to the design controls',
+    imagePosition: 'left top',
+    size: PROJECT_CARD_SIZE.standard,
+  },
+  {
+    name: 'Before You Send',
+    kind: PROJECT_KIND.personal,
+    summary: 'Flags harmful or toxic wording in a message before it is sent, with scores and calm rewrite tips.',
+    role: 'Designed and built it solo.',
+    outcome: 'A transformer model runs fully in the browser via WebGPU or WebAssembly; nothing leaves the device.',
+    tags: ['React', 'Transformers.js', 'ONNX', 'Web Workers'],
+    url: 'https://before-you-send-aomar.web.app',
+    codeUrl: 'https://github.com/hotmailbelike/before-you-send',
+    image: beforeYouSendImage,
+    imageAlt: 'Before You Send highlighting two harmful sentences with toxicity scores',
+    imagePosition: 'left top',
+    size: PROJECT_CARD_SIZE.standard,
+  },
+  {
+    name: 'Pulse',
+    kind: PROJECT_KIND.personal,
+    summary: 'Real-time audience polls for talks and classes: share a QR code and watch results animate as votes arrive.',
+    role: 'Designed and built it solo.',
+    outcome: 'Live updates through Firestore listeners, with one vote per device enforced by security rules.',
+    tags: ['React', 'TypeScript', 'Firestore'],
+    url: 'https://pulse-aomar.web.app',
+    codeUrl: 'https://github.com/hotmailbelike/pulse-live-polls',
+    image: pulseImage,
+    imageAlt: 'Pulse presenter view with live result bars and a QR code to join',
+    imagePosition: 'left top',
+    size: PROJECT_CARD_SIZE.standard,
+  },
+  {
+    name: 'ProfLens',
+    kind: PROJECT_KIND.personal,
+    summary:
+      'Student reviews of university professors: search by name, department or university, see rating summaries, and post a detailed review.',
+    role: 'Designed and built it solo, rebuilding my 2019 Express and MongoDB student project.',
+    outcome: 'A static React app on Firestore, where security rules validate every review field instead of a server.',
+    tags: ['React', 'TypeScript', 'Firestore'],
+    url: 'https://proflens-aomar.web.app',
+    codeUrl: 'https://github.com/hotmailbelike/proflens',
+    image: proflensImage,
+    imageAlt: 'ProfLens home: search, university filters and a list of professors with average ratings',
+    imagePosition: 'left top',
+    size: PROJECT_CARD_SIZE.standard,
   },
 ];
