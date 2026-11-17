@@ -1,0 +1,115 @@
+---
+import { ARCHIVED_PROJECTS, SELECTED_PROJECTS } from '../../data/projects';
+import ExternalLink from '../ExternalLink.astro';
+import Icon from '../Icon.astro';
+import SectionHeading from '../SectionHeading.astro';
+import WorkCard from './WorkCard.astro';
+---
+
+<section class="section container" aria-labelledby="work">
+  <SectionHeading id="work" index="02" title="Selected work" />
+
+  <div class="work-grid">
+    {SELECTED_PROJECTS.map((project) => <WorkCard project={project} />)}
+  </div>
+
+  <h3 class="more-work__title" id="more-work">More work</h3>
+  <div class="more-work__scroller" role="region" aria-labelledby="more-work" tabindex="0">
+    <table class="more-work">
+      <thead>
+        <tr>
+          <th scope="col">Year</th>
+          <th scope="col">Project</th>
+          <th scope="col">Built with</th>
+          <th scope="col">Link</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          ARCHIVED_PROJECTS.map((project) => (
+            <tr>
+              <td class="more-work__year">{project.year}</td>
+              <th scope="row" class="more-work__name">
+                {project.name}
+              </th>
+              <td class="more-work__muted">{project.builtWith}</td>
+              <td>
+                {project.url ? (
+                  <ExternalLink href={project.url} class="more-work__link">
+                    Code <Icon name="arrow-up-right" size={14} />
+                  </ExternalLink>
+                ) : (
+                  <span class="more-work__muted">Retired</span>
+                )}
+              </td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<style>
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+    gap: 3rem 2rem;
+  }
+
+  .more-work__title {
+    margin-block: 4.5rem 1rem;
+    font-size: var(--text-lg);
+  }
+
+  /* position: relative keeps absolutely positioned children (the visually hidden
+     "opens in a new tab" text) inside the scroll box; otherwise they escape it
+     and widen the whole page on phones. */
+  .more-work__scroller {
+    position: relative;
+    overflow-x: auto;
+  }
+
+  .more-work {
+    width: 100%;
+    min-width: 32rem;
+    border-collapse: collapse;
+    font-size: var(--text-sm);
+    text-align: left;
+  }
+
+  .more-work th,
+  .more-work td {
+    padding: 0.875rem 1rem 0.875rem 0;
+    border-top: 1px solid var(--color-border);
+    vertical-align: baseline;
+  }
+
+  .more-work thead th {
+    border-top: 0;
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .more-work__name {
+    font-weight: 600;
+  }
+
+  .more-work__year {
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .more-work__muted {
+    color: var(--color-muted);
+  }
+
+  .more-work__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+</style>
