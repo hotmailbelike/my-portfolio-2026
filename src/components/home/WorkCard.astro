@@ -1,7 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 
-import { PROJECT_CARD_SIZE, PROJECT_KIND, type Project } from '../../data/projects';
+import { PROJECT_CARD_SIZE, type Project } from '../../data/projects';
 import ExternalLink from '../ExternalLink.astro';
 import Icon from '../Icon.astro';
 import Tags from '../Tags.astro';
@@ -12,7 +12,6 @@ interface Props {
 
 const { project } = Astro.props;
 const isWide = project.size === PROJECT_CARD_SIZE.wide;
-const isPersonal = project.kind === PROJECT_KIND.personal;
 const CARD_IMAGE_WIDTHS = [400, 640, 960];
 /* Mirrors the grid in WorkSection.astro: two columns from 42rem in a 70rem container.
    A wide card puts its image beside the text, so the image is still one column wide. */
@@ -32,7 +31,6 @@ const CARD_IMAGE_SIZES = '(min-width: 72rem) 540px, (min-width: 42rem) 45vw, cal
     />
   </div>
   <div class="work-card__body">
-    {isPersonal && <p class="eyebrow work-card__kind">Personal project</p>}
     <h3 class="work-card__title">
       {
         project.url ? (
@@ -166,10 +164,6 @@ const CARD_IMAGE_SIZES = '(min-width: 72rem) 540px, (min-width: 42rem) 45vw, cal
     padding-top: 0.25rem;
   }
 
-  .work-card__kind {
-    margin-bottom: -0.375rem;
-    color: var(--color-accent);
-  }
 
   /* Sits above the title link's card-wide click area, so it stays its own target. */
   .work-card__code {
