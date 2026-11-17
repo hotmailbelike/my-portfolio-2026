@@ -1,0 +1,208 @@
+---
+/* A grid of images that open full size in a shared lightbox. App screens sit
+   in a browser frame; product images (renders, drawings) show bare. */
+import { getImage, Picture } from 'astro:assets';
+
+import type { Screenshot } from '../../data/projects';
+import BrowserFrame from '../BrowserFrame.astro';
+import Icon from '../Icon.astro';
+
+type GalleryVariant = 'screens' | 'outputs';
+
+interface Props {
+  items: Screenshot[];
+  variant: GalleryVariant;
+}
+
+const { items, variant } = Astro.props;
+const isFramed = variant === 'screens';
+
+const MAX_LIGHTBOX_WIDTH = 2400;
+const THUMBNAIL_WIDTHS = [400, 640, 960];
+/* Mirrors the grid below: 3 columns of app screens or 4 of product images
+   from 64rem in a 70rem container, 2 columns from 40rem. */
+const THUMBNAIL_SIZES = isFramed
+  ? '(min-width: 64rem) 360px, (min-width: 40rem) 45vw, calc(100vw - 2rem)'
+  : '(min-width: 64rem) 265px, (min-width: 40rem) 45vw, calc(100vw - 2rem)';
+
+const lightboxImages = await Promise.all(
+  items.map((item) =>
+    getImage({ src: item.image, width: Math.min(item.image.width, MAX_LIGHTBOX_WIDTH), format: 'webp' }),
+  ),
+);
+---
+
+<div class:list={['gallery', `gallery--${variant}`]} data-lightbox>
+  {
+    items.map((item, index) => {
+      const large = lightboxImages[index];
+      const thumbnail = (
+        <Picture
+          class="gallery__image"
+          src={item.image}
+          alt=""
+          formats={['avif', 'webp']}
+          widths={THUMBNAIL_WIDTHS}
+          sizes={THUMBNAIL_SIZES}
+          loading="lazy"
+          fetchpriority="low"
+        />
+      );
+      return (
+        <figure class="gallery__item">
+          <button
+            type="button"
+            class="gallery__trigger"
+            data-lightbox-trigger
+            data-lightbox-src={large.src}
+            data-lightbox-width={String(large.attributes.width)}
+            data-lightbox-height={String(large.attributes.height)}
+            data-lightbox-alt={item.alt}
+            data-lightbox-caption={item.caption}
+            aria-label={`Enlarge: ${item.alt}`}
+          >
+            {isFramed ? <BrowserFrame>{thumbnail}</BrowserFrame> : <div class="gallery__bare">{thumbnail}</div>}
+          </button>
+          <figcaption class="gallery__caption">{item.caption}</figcaption>
+        </figure>
+      );
+    })
+  }
+
+  <dialog class="lightbox" data-lightbox-dialog aria-label="Enlarged image">
+    <button type="button" class="lightbox__close" data-lightbox-close aria-label="Close">
+      <Icon name="close" size={20} />
+    </button>
+    <img class="lightbox__image" data-lightbox-image alt="" src="data:," />
+    <p class="lightbox__caption" data-lightbox-caption></p>
+  </dialog>
+</div>
+
+<script>
+  import '../../scripts/lightbox';
+</script>
+
+<style>
+  .gallery {
+    display: grid;
+    gap: 2rem 1.5rem;
+  }
+
+  @media (width >= 40rem) {
+    .gallery {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (width >= 64rem) {
+    .gallery--screens {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .gallery--outputs {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  .gallery__trigger {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius);
+    background: none;
+    cursor: zoom-in;
+  }
+
+  .gallery__image {
+    width: 100%;
+    object-fit: cover;
+  }
+
+  .gallery--screens .gallery__image {
+    aspect-ratio: 16 / 10;
+    object-position: left top;
+  }
+
+  .gallery--outputs .gallery__image {
+    aspect-ratio: 4 / 3;
+    object-position: center;
+  }
+
+  .gallery__bare {
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: var(--color-surface);
+  }
+
+  .gallery__trigger :global(.browser-frame),
+  .gallery__bare {
+    transition: border-color var(--duration-hover) var(--ease-out);
+  }
+
+  .gallery__trigger:hover :global(.browser-frame),
+  .gallery__trigger:hover .gallery__bare {
+    border-color: rgb(255 255 255 / 0.28);
+  }
+
+  .gallery__caption {
+    margin-top: 0.75rem;
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+
+  .lightbox {
+    /* Restores the browser's centering, which the global margin reset removes. */
+    margin: auto;
+    width: min(100vw - 2rem, 96rem);
+    max-width: none;
+    max-height: calc(100dvh - 2rem);
+    padding: 3.25rem 1rem 1rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .lightbox::backdrop {
+    background: rgb(0 0 0 / 0.85);
+  }
+
+  .lightbox__close {
+    position: absolute;
+    top: 0.625rem;
+    right: 0.625rem;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 50%;
+    background: var(--color-surface);
+    cursor: pointer;
+  }
+
+  .lightbox__close:hover {
+    border-color: var(--color-accent);
+  }
+
+  .lightbox__image {
+    width: 100%;
+    max-height: calc(100dvh - 9rem);
+    object-fit: contain;
+  }
+
+  /* While the next image loads: keep its space, but show nothing. */
+  .lightbox__image[hidden] {
+    display: block;
+    visibility: hidden;
+  }
+
+  .lightbox__caption {
+    margin-top: 0.75rem;
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+    text-align: center;
+  }
+</style>
