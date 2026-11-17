@@ -12,10 +12,9 @@ import facetflowOnBodyImage from '../assets/projects/facetflow-site/on-body.webp
 import facetflowRingRenderImage from '../assets/projects/facetflow-site/ring-render.webp';
 import facetflowTechnicalDrawingImage from '../assets/projects/facetflow-site/technical-drawing.webp';
 import harmcheckImage from '../assets/projects/harmcheck-opengraph.jpg';
-// Hidden for now with their cards below; uncomment both to show them again.
-// import medTrackerImage from '../assets/projects/med-tracker.webp';
-// import paceUpImage from '../assets/projects/pace-up.webp';
 import beforeYouSendImage from '../assets/projects/side/before-you-send.jpg';
+import medTrackerImage from '../assets/projects/side/med-tracker.jpg';
+import paceUpImage from '../assets/projects/side/pace-up.jpg';
 import proflensImage from '../assets/projects/side/proflens.jpg';
 import pulseImage from '../assets/projects/side/pulse.jpg';
 import ringStudioImage from '../assets/projects/side/ring-studio.jpg';
@@ -91,8 +90,6 @@ export interface Project {
   imageAlt: string;
   /** CSS object-position for the 16:10 crop, so the useful part of the shot stays in frame. */
   imagePosition: string;
-  /** Tall phone screenshots are shown whole ('contain') instead of cropped to 16:10. */
-  imageFit?: 'cover' | 'contain';
   size: ProjectCardSize;
 }
 
@@ -286,35 +283,6 @@ export const PROJECTS: Project[] = [
     imagePosition: 'center top',
     size: PROJECT_CARD_SIZE.standard,
   },
-  /* Hidden for now; uncomment this block and the two image imports above to show them again.
-  {
-    name: 'Pace Up!',
-    kind: PROJECT_KIND.professional,
-    summary:
-      'A competitive fitness game: challenge friends to rounds of timed races, where everyone runs with their phone to cover as much distance as possible.',
-    role: 'Built the React Native app and its Node.js back end at Techdojo.',
-    outcome: 'Shipped to Google Play.',
-    tags: ['React Native', 'Node.js', 'Express.js', 'MongoDB'],
-    image: paceUpImage,
-    imageAlt: "Pace Up! round results comparing two players' steps, distance and average speed",
-    imagePosition: 'center',
-    imageFit: 'contain',
-    size: PROJECT_CARD_SIZE.standard,
-  },
-  {
-    name: 'Med Tracker',
-    kind: PROJECT_KIND.professional,
-    summary: 'Schedule medications, get reminders and track intake across multiple prescriptions.',
-    role: 'Built the React Native app and its Node.js back end at Techdojo.',
-    outcome: 'Shipped to Google Play.',
-    tags: ['React Native', 'Node.js', 'Express.js', 'MongoDB'],
-    image: medTrackerImage,
-    imageAlt: 'Med Tracker medication schedule showing previous and upcoming doses',
-    imagePosition: 'center',
-    imageFit: 'contain',
-    size: PROJECT_CARD_SIZE.standard,
-  },
-  */
   {
     name: 'Ring Studio',
     kind: PROJECT_KIND.personal,
@@ -371,6 +339,36 @@ export const PROJECTS: Project[] = [
     image: proflensImage,
     imageAlt: 'ProfLens home: search, university filters and a list of professors with average ratings',
     imagePosition: 'left top',
+    size: PROJECT_CARD_SIZE.standard,
+  },
+  {
+    name: 'Med Tracker',
+    kind: PROJECT_KIND.personal,
+    summary:
+      'Schedule medications for yourself and family, get reminders, mark doses taken or skipped, and see 7-day adherence.',
+    role: 'Rebuilt as an installable web app from a React Native app I built in 2021.',
+    outcome: 'Works offline as a PWA, and all health data stays on the device in IndexedDB; nothing is sent to a server.',
+    tags: ['React', 'TypeScript', 'PWA', 'IndexedDB'],
+    url: 'https://med-tracker-aomar.web.app',
+    codeUrl: 'https://github.com/hotmailbelike/med-tracker',
+    image: medTrackerImage,
+    imageAlt: "Med Tracker's Today view with dose progress and today's doses",
+    imagePosition: 'center top',
+    size: PROJECT_CARD_SIZE.standard,
+  },
+  {
+    name: 'Pace Up!',
+    kind: PROJECT_KIND.personal,
+    summary:
+      'A multiplayer running race: friends join by code or QR, run timed rounds with their phones, and watch a live leaderboard.',
+    role: 'Rebuilt as a web app from a React Native app I built in 2021.',
+    outcome: 'GPS distance tracking in the browser with noise filtering, and live race state synced through Firestore.',
+    tags: ['React', 'TypeScript', 'Geolocation API', 'Firestore'],
+    url: 'https://pace-up-aomar.web.app',
+    codeUrl: 'https://github.com/hotmailbelike/pace-up',
+    image: paceUpImage,
+    imageAlt: 'Pace Up! demo race with live distance, the hold-to-run button and the leaderboard',
+    imagePosition: 'center top',
     size: PROJECT_CARD_SIZE.standard,
   },
 ];
