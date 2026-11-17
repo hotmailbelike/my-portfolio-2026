@@ -1,7 +1,5 @@
 ---
-import { EARLIER_PROJECTS, PROJECTS } from '../../data/projects';
-import ExternalLink from '../ExternalLink.astro';
-import Icon from '../Icon.astro';
+import { PROJECTS } from '../../data/projects';
 import SectionHeading from '../SectionHeading.astro';
 import WorkCard from './WorkCard.astro';
 ---
@@ -12,43 +10,12 @@ import WorkCard from './WorkCard.astro';
   <div class="work-grid">
     {PROJECTS.map((project) => <WorkCard project={project} />)}
   </div>
-
-  <h3 class="earlier__title" id="earlier-projects">Earlier projects</h3>
-  <div class="earlier__scroller" role="region" aria-labelledby="earlier-projects" tabindex="0">
-    <table class="earlier">
-      <thead>
-        <tr>
-          <th scope="col">Year</th>
-          <th scope="col">Project</th>
-          <th scope="col">Built with</th>
-        </tr>
-      </thead>
-      <tbody>
-        {
-          EARLIER_PROJECTS.map((project) => (
-            <tr>
-              <td class="earlier__year">{project.year}</td>
-              <th scope="row" class="earlier__name">
-                {project.url ? (
-                  <ExternalLink href={project.url} class="earlier__link">
-                    {project.name} <Icon name="arrow-up-right" size={14} />
-                  </ExternalLink>
-                ) : (
-                  project.name
-                )}
-              </th>
-              <td class="earlier__muted">{project.builtWith}</td>
-            </tr>
-          ))
-        }
-      </tbody>
-    </table>
-  </div>
 </section>
 
 <style>
   /* One column on phones, two from 42rem. A wide card (see WorkCard.astro)
-     takes a whole row, so every row below it holds two cards of the same shape. */
+     takes a whole row, so every row below it holds two cards of the same shape.
+     PROJECTS lists professional work first, so it stays on top. */
   .work-grid {
     display: grid;
     gap: 3.5rem 2.5rem;
@@ -58,61 +25,5 @@ import WorkCard from './WorkCard.astro';
     .work-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
-  }
-
-  .earlier__title {
-    margin-block: 4.5rem 1rem;
-    font-size: var(--text-lg);
-  }
-
-  /* position: relative keeps absolutely positioned children (the visually hidden
-     "opens in a new tab" text) inside the scroll box; otherwise they escape it
-     and widen the whole page on phones. */
-  .earlier__scroller {
-    position: relative;
-    overflow-x: auto;
-  }
-
-  .earlier {
-    width: 100%;
-    min-width: 26rem;
-    border-collapse: collapse;
-    font-size: var(--text-sm);
-    text-align: left;
-  }
-
-  .earlier th,
-  .earlier td {
-    padding: 0.875rem 1rem 0.875rem 0;
-    border-top: 1px solid var(--color-border);
-    vertical-align: baseline;
-  }
-
-  .earlier thead th {
-    border-top: 0;
-    color: var(--color-muted);
-    font-size: 0.75rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .earlier__name {
-    font-weight: 600;
-  }
-
-  .earlier__year {
-    color: var(--color-muted);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .earlier__muted {
-    color: var(--color-muted);
-  }
-
-  .earlier__link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
   }
 </style>
