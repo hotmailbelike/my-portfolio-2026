@@ -1,0 +1,123 @@
+---
+/* The email address as a mailto link, with a small copy button at its
+   top-right corner. The button ships hidden and copy-email.ts reveals it
+   once the clipboard is available, so it never shows without working. */
+import Icon from './Icon.astro';
+
+type EmailSize = 'medium' | 'large';
+
+interface Props {
+  email: string;
+  size?: EmailSize;
+}
+
+const COPY_ICON_SIZE: Record<EmailSize, number> = { medium: 14, large: 18 };
+
+const { email, size = 'medium' } = Astro.props;
+---
+
+<span class:list={['email', `email--${size}`]} data-copy-email={email}>
+  <a class="email__address" href={`mailto:${email}`}>{email}</a>
+  <button type="button" class="email__copy" data-copy-email-button aria-label="Copy email address" hidden>
+    <Icon name="copy" size={COPY_ICON_SIZE[size]} class="email__icon email__icon--copy" />
+    <Icon name="check" size={COPY_ICON_SIZE[size]} class="email__icon email__icon--check" />
+    <span class="email__copied" aria-hidden="true">Copied</span>
+  </button>
+  <span class="visually-hidden" aria-live="polite" data-copy-email-status></span>
+</span>
+
+<script>
+  import '../scripts/copy-email';
+</script>
+
+<style>
+  .email {
+    position: relative;
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 0.25rem;
+    max-width: 100%;
+  }
+
+  .email__address {
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
+    text-decoration-color: var(--color-accent);
+  }
+
+  .email__address:hover {
+    color: var(--color-accent);
+  }
+
+  .email--medium .email__address {
+    font-size: var(--text-lg);
+    text-decoration-thickness: 1px;
+  }
+
+  .email--large .email__address {
+    font-size: clamp(1.375rem, 3vw + 0.5rem, 2.5rem);
+    letter-spacing: -0.02em;
+    text-decoration-thickness: 2px;
+  }
+
+  /* Sits at the address's top-right, like a superscript. */
+  .email__copy {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    padding: 0.25rem;
+    border: 0;
+    border-radius: 0.375rem;
+    background: transparent;
+    color: var(--color-muted);
+    cursor: pointer;
+    transform: translateY(-0.25rem);
+    transition: color var(--duration-hover) var(--ease-out), background var(--duration-hover) var(--ease-out);
+  }
+
+  .email__copy[hidden] {
+    display: none;
+  }
+
+  .email__copy:hover {
+    background: var(--color-accent-tint);
+    color: var(--color-accent);
+  }
+
+  /* The icons render inside Icon.astro, outside this component's style scope. */
+  .email__copy :global(.email__icon--check),
+  .is-copied :global(.email__icon--copy) {
+    display: none;
+  }
+
+  .is-copied :global(.email__icon--check) {
+    display: block;
+    color: var(--color-accent);
+  }
+
+  /* A small "Copied" note above the icon while the copied state lasts. */
+  .email__copied {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-50%);
+    transition: opacity var(--duration-hover) var(--ease-out);
+  }
+
+  .is-copied .email__copied {
+    opacity: 1;
+  }
+</style>
