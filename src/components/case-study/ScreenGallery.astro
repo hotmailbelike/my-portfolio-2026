@@ -1,0 +1,154 @@
+---
+import { getImage, Picture } from 'astro:assets';
+
+import type { Screenshot } from '../../data/projects';
+import BrowserFrame from '../BrowserFrame.astro';
+import Icon from '../Icon.astro';
+
+interface Props {
+  screens: Screenshot[];
+}
+
+const { screens } = Astro.props;
+
+const LIGHTBOX_IMAGE_WIDTH = 2400;
+const SCREEN_WIDTHS = [640, 960, 1280, 1800];
+const SCREEN_SIZES = '(min-width: 56rem) 880px, calc(100vw - 2rem)';
+
+const lightboxImages = await Promise.all(
+  screens.map((screen) => getImage({ src: screen.image, width: LIGHTBOX_IMAGE_WIDTH, format: 'webp' })),
+);
+---
+
+<div class="gallery" data-lightbox>
+  {
+    screens.map((screen, index) => {
+      const large = lightboxImages[index];
+      return (
+        <figure class="gallery__item">
+          <button
+            type="button"
+            class="gallery__trigger"
+            data-lightbox-trigger
+            data-lightbox-src={large.src}
+            data-lightbox-width={String(large.attributes.width)}
+            data-lightbox-height={String(large.attributes.height)}
+            data-lightbox-alt={screen.alt}
+            data-lightbox-caption={screen.caption}
+            aria-label={`Enlarge: ${screen.alt}`}
+          >
+            <BrowserFrame>
+              <Picture
+                src={screen.image}
+                alt=""
+                formats={['avif', 'webp']}
+                widths={SCREEN_WIDTHS}
+                sizes={SCREEN_SIZES}
+                loading="lazy"
+                fetchpriority="low"
+              />
+            </BrowserFrame>
+          </button>
+          <figcaption class="gallery__caption">{screen.caption}</figcaption>
+        </figure>
+      );
+    })
+  }
+
+  <dialog class="lightbox" data-lightbox-dialog aria-label="Enlarged screenshot">
+    <button type="button" class="lightbox__close" data-lightbox-close aria-label="Close">
+      <Icon name="close" size={20} />
+    </button>
+    <img class="lightbox__image" data-lightbox-image alt="" src="data:," />
+    <p class="lightbox__caption" data-lightbox-caption></p>
+  </dialog>
+</div>
+
+<script>
+  import '../../scripts/lightbox';
+</script>
+
+<style>
+  .gallery {
+    display: grid;
+    gap: 3rem;
+  }
+
+  .gallery__trigger {
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius);
+    background: none;
+    cursor: zoom-in;
+  }
+
+  .gallery__trigger :global(.browser-frame) {
+    transition: border-color var(--duration-hover) var(--ease-out);
+  }
+
+  .gallery__trigger:hover :global(.browser-frame) {
+    border-color: rgb(255 255 255 / 0.28);
+  }
+
+  .gallery__caption {
+    margin-top: 0.875rem;
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+  }
+
+  .lightbox {
+    /* Restores the browser's centering, which the global margin reset removes. */
+    margin: auto;
+    width: min(100vw - 2rem, 96rem);
+    max-width: none;
+    max-height: calc(100dvh - 2rem);
+    padding: 3.25rem 1rem 1rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius);
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .lightbox::backdrop {
+    background: rgb(0 0 0 / 0.85);
+  }
+
+  .lightbox__close {
+    position: absolute;
+    top: 0.625rem;
+    right: 0.625rem;
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 50%;
+    background: var(--color-surface);
+    cursor: pointer;
+  }
+
+  .lightbox__close:hover {
+    border-color: var(--color-accent);
+  }
+
+  .lightbox__image {
+    width: 100%;
+    max-height: calc(100dvh - 9rem);
+    object-fit: contain;
+  }
+
+  /* While the next screenshot loads: keep its space, but show nothing. */
+  .lightbox__image[hidden] {
+    display: block;
+    visibility: hidden;
+  }
+
+  .lightbox__caption {
+    margin-top: 0.75rem;
+    color: var(--color-muted);
+    font-size: var(--text-sm);
+    text-align: center;
+  }
+</style>
