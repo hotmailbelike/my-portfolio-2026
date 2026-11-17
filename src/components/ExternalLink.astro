@@ -1,0 +1,14 @@
+---
+/* Every link off the site opens in a new tab (the owner's choice). Screen
+   reader users are told so, because the new tab breaks the Back button. */
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = Omit<HTMLAttributes<'a'>, 'target' | 'rel'> & { href: string };
+
+const { href, ...attributes } = Astro.props;
+---
+
+<a href={href} target="_blank" rel="noopener noreferrer" {...attributes}>
+  <slot />
+  <span class="visually-hidden"> (opens in a new tab)</span>
+</a>
