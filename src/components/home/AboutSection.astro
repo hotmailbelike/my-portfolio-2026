@@ -9,7 +9,7 @@ const PHOTO_WIDTHS = [240, 480];
 ---
 
 <section class="section container" aria-labelledby="about">
-  <SectionHeading id="about" index="03" title="About" />
+  <SectionHeading id="about" title="About" />
   <div class="about">
     <div class="about__text">
       {PROFILE.about.map((paragraph) => <p>{paragraph}</p>)}
@@ -58,18 +58,6 @@ const PHOTO_WIDTHS = [240, 480];
     object-fit: cover;
     border: 1px solid var(--color-border);
     border-radius: var(--radius);
-    filter: grayscale(1);
-  }
-
-  /* Small color moment on hover: the photo regains its color. */
-  @media (prefers-reduced-motion: no-preference) {
-    .about__photo {
-      transition: filter 400ms var(--ease-out);
-    }
-  }
-
-  .about__photo:hover {
-    filter: none;
   }
 
   @media (width < 48rem) {
