@@ -1,17 +1,33 @@
 import type { ImageMetadata } from 'astro';
 
 import alloyImage from '../assets/projects/alloy.webp';
-import bevyShareCartImage from '../assets/projects/bevy-share-cart.png';
+import bevyPriceRulesImage from '../assets/projects/bevy-price-rules.webp';
+import bevyShareCartImage from '../assets/projects/bevy-share-cart.webp';
 import facetflowAssetLibraryImage from '../assets/projects/facetflow-asset-library.jpg';
 import facetflowHomeImage from '../assets/projects/facetflow-home.jpg';
 import facetflowRenderOnBodyImage from '../assets/projects/facetflow-render-on-body.jpg';
 import facetflowStudioImage from '../assets/projects/facetflow-studio.jpg';
+import facetflowGeneratedViewImage from '../assets/projects/facetflow-site/generated-view.webp';
+import facetflowOnBodyImage from '../assets/projects/facetflow-site/on-body.webp';
+import facetflowRingRenderImage from '../assets/projects/facetflow-site/ring-render.webp';
+import facetflowTechnicalDrawingImage from '../assets/projects/facetflow-site/technical-drawing.webp';
+import harmcheckImage from '../assets/projects/harmcheck-opengraph.jpg';
 import tradesOrgImage from '../assets/projects/trades-org.png';
 
 export interface Screenshot {
   image: ImageMetadata;
   alt: string;
   caption: string;
+}
+
+export interface ContributionArea {
+  title: string;
+  items: string[];
+}
+
+export interface WorkingPrinciple {
+  title: string;
+  text: string;
 }
 
 export interface FeaturedProject {
@@ -24,11 +40,28 @@ export interface FeaturedProject {
   role: string;
   tags: string[];
   url: string;
+  /** The product's own public tour of everything it does. */
+  workflowsUrl: string;
   hero: Screenshot;
+  /** Screens from inside the app. */
   screens: Screenshot[];
+  /** Work the product makes, from the company's public site. */
+  outputs: Screenshot[];
+  /** Product areas not pictured, named on the "and much more" tile. */
+  otherWorkflows: string[];
+  contributionAreas: ContributionArea[];
+  workingPrinciples: WorkingPrinciple[];
 }
 
-export interface SelectedProject {
+export const PROJECT_CARD_SIZE = {
+  standard: 'standard',
+  /** Takes a whole row on wider screens, with its image beside the text. */
+  wide: 'wide',
+} as const;
+
+export type ProjectCardSize = (typeof PROJECT_CARD_SIZE)[keyof typeof PROJECT_CARD_SIZE];
+
+export interface Project {
   name: string;
   summary: string;
   role: string;
@@ -40,52 +73,149 @@ export interface SelectedProject {
   imageAlt: string;
   /** CSS object-position for the 16:10 crop, so the useful part of the shot stays in frame. */
   imagePosition: string;
+  size: ProjectCardSize;
 }
 
-export interface ArchivedProject {
+export interface EarlierProject {
   year: string;
   name: string;
   builtWith: string;
-  /** Left out when the app is no longer live; the row then reads "Retired". */
+  /** Only for projects with something live to show; the name becomes the link. */
   url?: string;
 }
 
 export const FACETFLOW: FeaturedProject = {
   slug: 'facetflow',
-  name: 'FacetFlow',
-  years: '2025–now',
+  name: 'Facet Flow',
+  years: '2025–Present',
   summary:
-    'An AI design and pricing platform for jewelers. One chat plans each request and hands it to specialist agents, turning a sketch or photo into photoreal renders, 3D models, on-body previews and tier-by-tier prices.',
+    'A professional jewelry development suite. AI takes a piece from its first sketch to photoreal renders, generated views, technical drawings, CAD and tier-by-tier prices, in one workspace for every team.',
   teaser:
-    'An AI design and pricing platform for jewelers. One chat plans each request and hands it to specialist agents for renders, 3D models and prices.',
-  role: 'Software engineer working with the founders, across the web app and the agent backend.',
+    'Jewelry design software that takes a piece from first sketch to renders, technical drawings, 3D models and prices, in one AI workspace.',
+  role: 'Software Engineer on a small team working closely with the founders.',
   tags: ['TypeScript', 'Next.js', 'Nest.js', 'LangGraph', 'PostgreSQL', 'Gemini'],
   url: 'https://facetflow.io/',
+  workflowsUrl: 'https://facetflow.io/workflows',
   hero: {
     image: facetflowHomeImage,
-    alt: "FacetFlow home: a grid of a studio's jewelry designs with the chat box below",
+    alt: "Facet Flow home: a grid of a studio's jewelry designs with the chat box below",
     caption: 'Home. Every design the studio has made, one chat box away from the next one.',
   },
   screens: [
     {
       image: facetflowStudioImage,
-      alt: 'FacetFlow Design Studio: a ring design with its version history and a price estimate panel',
+      alt: 'Facet Flow Design Studio: a ring design with its version history and a price estimate panel',
       caption: 'Design Studio. Each prompt makes a new version, and any version can be priced in place.',
     },
     {
       image: facetflowRenderOnBodyImage,
-      alt: 'FacetFlow Render on Body: placing a ring on a hand silhouette before rendering',
+      alt: 'Facet Flow Render on Body: placing a ring on a hand silhouette before rendering',
       caption: 'Render on Body. Place a ring on a hand, then render it being worn.',
     },
     {
       image: facetflowAssetLibraryImage,
-      alt: 'FacetFlow Asset Library: a generated 3D ring model with GLB, 3DM, STL and USDZ downloads',
+      alt: 'Facet Flow Asset Library: a generated 3D ring model with GLB, 3DM, STL and USDZ downloads',
       caption: 'Asset Library. Generated 3D models, ready to download for CAD or AR.',
+    },
+  ],
+  outputs: [
+    {
+      image: facetflowRingRenderImage,
+      alt: 'A photoreal render of a yellow gold ring set with four blue topaz stones',
+      caption: 'A photoreal render, refined prompt by prompt in the Design Studio.',
+    },
+    {
+      image: facetflowOnBodyImage,
+      alt: 'A model wearing a blue topaz station necklace and a matching cocktail ring',
+      caption: 'Render on Body: the same designs, seen being worn.',
+    },
+    {
+      image: facetflowTechnicalDrawingImage,
+      alt: 'A technical drawing of a rose gold and aquamarine clip earring with dimensions and callouts',
+      caption: 'A technical drawing with dimensions and callouts, ready for the bench.',
+    },
+    {
+      image: facetflowGeneratedViewImage,
+      alt: 'An isometric view of a gold bamboo ring with two pear-cut diamonds',
+      caption: 'Generated views: top, side and isometric angles from one design.',
+    },
+  ],
+  otherWorkflows: [
+    'Generate CAD',
+    'CAD to images',
+    'Jewelry builder',
+    'Style transfer',
+    'Upscale to 4K',
+    'Jewelry costing',
+    'Stone sourcing',
+    'Technical reports',
+  ],
+  contributionAreas: [
+    {
+      title: 'Design & editing',
+      items: [
+        'Design generation from prompts, sketches and reference images.',
+        'The Design Studio: versions, annotation and guided refinement.',
+        'Flows: guided, step-by-step workflows for common jobs.',
+        'Style transfer, generated views and upscaling to 4K.',
+      ],
+    },
+    {
+      title: 'AI assistants',
+      items: [
+        'Autopilot, the chat that ties the whole product together.',
+        'Pricing Assistant: tier-by-tier prices from a design.',
+        'Stone Finder and Jewelry Concierge for sourcing and questions.',
+      ],
+    },
+    {
+      title: 'Engineering & manufacturing',
+      items: [
+        'Technical drawings and technical reports.',
+        'Generated 3D models and CAD, with GLB, STL and USDZ downloads.',
+        'Render on Body and the jewelry builder.',
+      ],
+    },
+    {
+      title: 'Platform',
+      items: [
+        'The Asset Library and projects that keep every piece organized.',
+        'Teams, roles and usage-based billing.',
+        'Live progress and dependable retries for long AI generations.',
+      ],
+    },
+  ],
+  workingPrinciples: [
+    {
+      title: 'Close to the founders and the craft',
+      text: 'I turn jewelry-specific requirements, like stones, metals, labor and margins, into features jewelers can use without training.',
+    },
+    {
+      title: 'End to end',
+      text: 'I take features from the first interface sketch through the services and data behind them, and stay with them after launch.',
+    },
+    {
+      title: 'Small, tested steps',
+      text: 'Each change ships in small slices, tested by hand in the real app on desktop and phone before it reaches customers.',
     },
   ],
 };
 
-export const SELECTED_PROJECTS: SelectedProject[] = [
+/** In grid order: the wide Alphy card takes the first row, then two cards per row. */
+export const PROJECTS: Project[] = [
+  {
+    name: 'Alphy → HarmCheck',
+    summary:
+      'Alphy, a Silicon Valley startup, first built a community app for advancing women in their careers (talks, learning tracks, jobs, groups), then pivoted to HarmCheck: AI that flags harmful or non-compliant messages before they are sent, delivered as a browser extension, an Outlook add-in and integrations for other email services.',
+    role: "Built Alphy's React Native app, then worked on HarmCheck's browser extension, Outlook add-in and email integrations as the company pivoted.",
+    outcome: 'Alphy is now HarmCheck, used by enterprise compliance teams.',
+    tags: ['React Native', 'Firebase', 'Cosmic', 'Detox'],
+    url: 'https://www.harmcheck.com/',
+    image: harmcheckImage,
+    imageAlt: 'HarmCheck home page: "Know Risk. Know Reward." beside a person working on a laptop',
+    imagePosition: 'left center',
+    size: PROJECT_CARD_SIZE.wide,
+  },
   {
     name: 'Trades.org CRM & ATS',
     summary:
@@ -97,6 +227,7 @@ export const SELECTED_PROJECTS: SelectedProject[] = [
     image: tradesOrgImage,
     imageAlt: 'Trades.org ATS landing page: "Enhance your hiring potential with our advanced ATS solutions"',
     imagePosition: 'center top',
+    size: PROJECT_CARD_SIZE.standard,
   },
   {
     name: 'Alloy',
@@ -109,24 +240,38 @@ export const SELECTED_PROJECTS: SelectedProject[] = [
     image: alloyImage,
     imageAlt: 'Three phones showing the Alloy app: home, splash screen, and a gold ring payout estimate',
     imagePosition: 'center',
+    size: PROJECT_CARD_SIZE.standard,
   },
   {
-    name: 'Bevy Shopify apps',
+    name: 'Bevy Price Rules',
     summary:
-      'Sales Rules let store owners stack discount rules (since retired); Share Cart lets shoppers share a cart that a friend can rebuild and buy in one click.',
-    role: 'Built both apps from first concept to deployment.',
-    outcome: 'Used by tens of thousands of users.',
-    tags: ['React', 'Next.js', 'Koa.js', 'MongoDB'],
-    url: 'https://bevycommerce.com/share-cart/',
+      'A Shopify app for rule-based pricing: store owners bulk-edit prices and schedule sales by title, tag, collection, price and more, with discounts that stack.',
+    role: 'Built the app from first concept to deployment.',
+    outcome: "Part of Bevy's app suite, used by tens of thousands of users.",
+    tags: ['React', 'Next.js', 'Node.js', 'MongoDB'],
+    url: 'https://www.bevycommerce.com/price-rules/',
+    image: bevyPriceRulesImage,
+    imageAlt: 'Bevy Price Rules dashboard: a list of scheduled sales with their rules, status and variant counts',
+    imagePosition: 'center',
+    size: PROJECT_CARD_SIZE.standard,
+  },
+  {
+    name: 'Bevy Share Cart',
+    summary:
+      'A Shopify app that adds a share button to the cart, so shoppers can send their cart to a friend who rebuilds it and buys in one click.',
+    role: 'Built the app from first concept to deployment.',
+    outcome: "Part of Bevy's app suite, used by tens of thousands of users.",
+    tags: ['React', 'Node.js', 'Koa.js', 'MongoDB'],
+    url: 'https://www.bevycommerce.com/share-cart/',
     image: bevyShareCartImage,
-    imageAlt: 'Bevy Share Cart features: a share-cart button, a customization panel and a sharing dashboard',
-    imagePosition: 'left top',
+    imageAlt: 'Bevy Share Cart settings: share counts, link clicks and revenue above color and button design controls',
+    imagePosition: 'center top',
+    size: PROJECT_CARD_SIZE.standard,
   },
 ];
 
 /** Years come from each project's repository or store history. */
-export const ARCHIVED_PROJECTS: ArchivedProject[] = [
-  { year: '2021', name: 'Alphy', builtWith: 'React Native, Firebase, Detox' },
+export const EARLIER_PROJECTS: EarlierProject[] = [
   { year: '2021', name: 'Pace Up!', builtWith: 'React Native, Node.js, MongoDB' },
   { year: '2020', name: 'Med Tracker', builtWith: 'React Native, Node.js, MongoDB' },
   {
