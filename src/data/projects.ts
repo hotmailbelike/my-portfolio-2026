@@ -12,8 +12,9 @@ import facetflowOnBodyImage from '../assets/projects/facetflow-site/on-body.webp
 import facetflowRingRenderImage from '../assets/projects/facetflow-site/ring-render.webp';
 import facetflowTechnicalDrawingImage from '../assets/projects/facetflow-site/technical-drawing.webp';
 import harmcheckImage from '../assets/projects/harmcheck-opengraph.jpg';
-import medTrackerImage from '../assets/projects/med-tracker.webp';
-import paceUpImage from '../assets/projects/pace-up.webp';
+// Hidden for now with their cards below; uncomment both to show them again.
+// import medTrackerImage from '../assets/projects/med-tracker.webp';
+// import paceUpImage from '../assets/projects/pace-up.webp';
 import beforeYouSendImage from '../assets/projects/side/before-you-send.jpg';
 import proflensImage from '../assets/projects/side/proflens.jpg';
 import pulseImage from '../assets/projects/side/pulse.jpg';
@@ -285,6 +286,7 @@ export const PROJECTS: Project[] = [
     imagePosition: 'center top',
     size: PROJECT_CARD_SIZE.standard,
   },
+  /* Hidden for now; uncomment this block and the two image imports above to show them again.
   {
     name: 'Pace Up!',
     kind: PROJECT_KIND.professional,
@@ -312,6 +314,7 @@ export const PROJECTS: Project[] = [
     imageFit: 'contain',
     size: PROJECT_CARD_SIZE.standard,
   },
+  */
   {
     name: 'Ring Studio',
     kind: PROJECT_KIND.personal,
