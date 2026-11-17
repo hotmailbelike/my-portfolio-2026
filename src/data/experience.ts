@@ -21,10 +21,10 @@ export const ROLES: Role[] = [
     start: 'Jan 2025',
     end: 'Present',
     title: 'Software Engineer',
-    company: 'FacetFlow',
+    company: 'Facet Flow',
     companyUrl: 'https://facetflow.io/',
     summary:
-      'Building FacetFlow AI with the founders: AI-assisted jewelry design, pricing and technical-drawing workflows, end to end across the web app and its agent backend.',
+      'Building Facet Flow AI with the founders: AI-assisted jewelry design, pricing and technical-drawing workflows, end to end across the web app and the services behind it.',
     tags: ['TypeScript', 'Next.js', 'Nest.js', 'LangGraph', 'PostgreSQL'],
   },
   {
@@ -54,7 +54,7 @@ export const ROLES: Role[] = [
     company: 'Techdojo',
     companyUrl: 'http://tech-dojo.org/',
     summary:
-      'Led web and mobile builds for clients: gathered requirements, split the work across the team, took on the hardest problems, and presented features to the managing director.',
+      'Led web and mobile builds for clients, including Alphy (now HarmCheck), a Silicon Valley startup: gathered requirements, split the work across the team, took on the hardest problems, and presented features to the managing director.',
     tags: ['React', 'React Native', 'Next.js', 'Node.js'],
   },
   {
@@ -62,7 +62,7 @@ export const ROLES: Role[] = [
     end: 'Apr 2021',
     title: 'Software Engineer',
     company: 'Bevy Commerce',
-    companyUrl: 'https://bevycommerce.com/',
+    companyUrl: 'https://www.bevycommerce.com/',
     summary: 'Built Shopify apps used by tens of thousands of users, from first concept to deployment.',
     tags: ['React', 'Next.js', 'Koa.js', 'MongoDB'],
   },
